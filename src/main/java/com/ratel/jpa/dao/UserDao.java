@@ -16,22 +16,32 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface UserDao extends JpaRepository<User, String> , JpaSpecificationExecutor<User> {
-
-    @Query(value = "select u.* from tb_user u where  u.id in (?1)",nativeQuery = true)
-    //@Query(value = "select u.* from tb_user u where if( length (?1),u.id in (?1),1=1)",nativeQuery = true)
-   // @Query(value = "select u from User u where nullif(?1,1=1) ")
-    List<User> findAllByIdList(List<String> idList);
-
     /**
-     ** paramString : 自定义 hql
-     ** paramMap : hql中查询条件的参数
-     ** start：数据开始条数
-     ** max：最大数据条数
+     *
+     *根据jpa的命名规范进行查询，具体可参考：https://blog.csdn.net/java_zyq/article/details/85262373
+     *但是这种查询方法无法进行连表查询
      **/
-    // List<User> query(String paramString, Map paramMap, int start, int max);
-
     List<User> findAllByIdIn(List<String> idList);
 
     List<User> findAllByIdInAndIdEquals(List<String> idList,String id);
+
+    User findById(String id);
+
+
+    /**
+     * nativeQuery = true 使用原生的sql进行查询，这时候的表名要写成和数据库的一致的
+     *
+     **/
+    @Query(value = "select u.* from tb_user u where  u.id in (?1)",nativeQuery = true)
+    List<User> findAllByIdList(List<String> idList);
+
+    /**
+     * from后面是跟的实体类,由于实体类上加的有库表映射关系，最后jpa会自动映射为对应的表
+     *
+     **/
+    @Query(value = "select u from User u where  u.id in (?1)")
+    List<User> findByIdList(List<String> idList);
+
+
 
 }

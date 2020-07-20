@@ -10,6 +10,9 @@ spring:
   jpa:
     database: MySQL
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
+    show-sql: true  #打印sql
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+       format_sql: true  #格式化sql

@@ -7,14 +7,19 @@ package com.ratel.jpa.entity;
  * @create: 2020-07-09
  **/
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+
 @Entity
-@Table(name = "tb_user")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "tb_user")
 public class User {
 
     @Id
@@ -31,10 +36,10 @@ public class User {
     @Column(name = "email", length = 64)
     private String email;
 
-    public static void main(String[] args) {
-        while (true){
-        }
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
-
 }
 

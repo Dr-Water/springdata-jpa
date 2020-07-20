@@ -11,7 +11,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.criteria.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,21 +27,83 @@ public class JpaApplicationTests {
     @Autowired
     private UserDao userDao;
 
+    //springjpa的简单使用
     @Test
-    public void t1(){
-        List<User> all = userDao.findAll();
-        System.out.println(all);
+    public void findAll(){
+        List<User> list = userDao.findAll();
+        list.forEach(System.out::println);
     }
 
+    /**
+     * 根据主键id获取一个对象
+     */
     @Test
-    public void t2(){
+    public void findOne(){
+        System.out.println(userDao.findOne("1"));
+    }
+
+    /**
+     * 自定义的
+     */
+    @Test
+    public void findById(){
+        System.out.println(userDao.findById("1"));
+    }
+
+    /**
+     *新增一个对象
+     */
+    @Test
+    public void save(){
+        //User user = userDao.save(new User( "zhangsan", "2222", "123@qq.com"));
+        User user = userDao.save(new User( "1002","zhangsan", "333", "123@qq.com"));
+        System.out.println(user);
+    }
+
+    /**
+     * 删除
+     */
+    @Test
+    public void delete(){
+        userDao.delete("1");
+    }
+
+
+    /**
+     *测试原生查询
+     */
+    @Test
+    public void nativeQueryTest(){
         ArrayList<String> idList = new ArrayList<>();
         idList.add("1");
         idList.add("2");
-
-        List<User> all = userDao.findAllByIdList(null);
-        System.out.println(all);
+        List<User> all = userDao.findAllByIdList(idList);
+        all.forEach(System.out::println);
     }
+
+    /**
+     *测试jpa的独有的查询
+     */
+    @Test
+    public void jpaTest(){
+        ArrayList<String> idList = new ArrayList<>();
+        idList.add("3");
+        idList.add("4");
+        List<User> all = userDao.findByIdList(idList);
+        all.forEach(System.out::println);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Test
     public void t3(){
@@ -47,8 +112,8 @@ public class JpaApplicationTests {
         list.add(Long.valueOf(4));
         list.add(Long.valueOf(5));
         paramMap.put("id", list);
-       // List<User> users = userDao.query("select obj from Goods obj where obj.gc.id in(:id)", paramMap, -1, -1);
-       // System.out.println(users);
+        // List<User> users = userDao.query("select obj from Goods obj where obj.gc.id in(:id)", paramMap, -1, -1);
+        // System.out.println(users);
     }
     @Test
     public void t4(){
